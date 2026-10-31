@@ -13,10 +13,20 @@ public class CreateRedirectController {
     @Autowired
     UrlShortenerService shortener;
 
-    @RequestMapping(value="/make_shorter", method = RequestMethod.POST)
-    public CreateRedirectResponse createRedirect(@RequestBody CreateRedirectRequest request) {
-        Pair<String, String> shortUrlAndSecret = shortener.shorten(request.getLongUrl());
-        return new CreateRedirectResponse(shortUrlAndSecret.getFirst(), shortUrlAndSecret.getSecond());
-    }
+    @RequestMapping(value = "/make_shorter", method = RequestMethod.POST)
+    public CreateRedirectResponse createRedirect(
+            @RequestBody CreateRedirectRequest request) {
 
+        Pair<String, String> shortUrlAndSecret = shortener.shorten(
+                request.getLongUrl(),
+                request.getVipKey(),
+                request.getTimeToLive(),
+                request.getTimeToLiveUnit()
+        );
+
+        return new CreateRedirectResponse(
+                shortUrlAndSecret.getFirst(),
+                shortUrlAndSecret.getSecond()
+        );
+    }
 }
